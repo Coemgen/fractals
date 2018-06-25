@@ -1,0 +1,65 @@
+<script>
+/*jslint browser*/
+const psi = (1 + Math.sqrt(5)) / 2;
+const c = [1 - psi, 0];
+const maxIterations = 100;
+
+function juliaSet(x, y, r) {
+    "use strict";
+    if (Math.sqrt(x * x + y * y) > 2) {
+        return r / maxIterations * maxIterations;
+    }
+    if (r === maxIterations) {
+        return 0;
+    }
+    /*
+    z' = z*z + c, z = x + yi, c = ?
+    x + yi
+    x + yi
+    x*x + 2xyi - y*y
+    xx - yy + 2xyi + c?, e.g., xx - yy - 0.6 + 2xyi + 0i
+    */
+    r += 1;
+    return juliaSet(x * x - y * y + c[0], 2 * x * y + c[1], r);
+}
+
+function main() {
+    "use strict";
+    // Create Canvas
+    var myCanvas = document.createElement("canvas");
+    var ctx = {};
+    var magnificationFactor = 200;
+    var panX = 1.5;
+    var panY = 1.5;
+    var x = 0;
+    var y = 0;
+    var belongsToSet;
+    myCanvas.width = 600;
+    myCanvas.height = 600;
+    document.body.appendChild(myCanvas);
+    ctx = myCanvas.getContext("2d");
+
+    // Start drawing
+    while (x < myCanvas.width) {
+        y = 0;
+        while (y < myCanvas.height) {
+            belongsToSet = juliaSet(
+                x / magnificationFactor - panX,
+                y / magnificationFactor - panY,
+                0
+            );
+            if (belongsToSet === 0) {
+                ctx.fillStyle = "#000";
+                ctx.fillRect(x, y, 1, 1); // Draw a black pixel
+            } else {
+                ctx.fillStyle = "hsl(120, 100%, " + belongsToSet + "%)";
+                ctx.fillRect(x, y, 1, 1); // Draw a colorful pixel
+            }
+            y += 1;
+        }
+        x += 1;
+    }
+}
+
+main();
+</script>
