@@ -1,15 +1,18 @@
 <script>
 /*jslint browser*/
-const psi = (1 + Math.sqrt(5)) / 2;
-const c = [1 - psi, 0];
-const maxIterations = 100;
+const phi = (1 + Math.sqrt(5)) / 2; // golden mean
+//const c = [1 - phi, 0];
+//const c = [phi - 2, phi -1];
+const c = [-0.8, 0.156];
+const radius = 2;
+const maxRecursions = 100;
 
 function juliaSet(x, y, r) {
     "use strict";
-    if (Math.sqrt(x * x + y * y) > 2) {
-        return r / maxIterations * maxIterations;
+    if (Math.sqrt(x * x + y * y) > radius) {
+        return r / maxRecursions * maxRecursions;
     }
-    if (r === maxIterations) {
+    if (r === maxRecursions) {
         return 0;
     }
     /*
@@ -49,10 +52,10 @@ function main() {
                 0
             );
             if (belongsToSet === 0) {
-                ctx.fillStyle = "#000";
+                ctx.fillStyle = "#f00";
                 ctx.fillRect(x, y, 1, 1); // Draw a black pixel
             } else {
-                ctx.fillStyle = "hsl(120, 100%, " + belongsToSet + "%)";
+                ctx.fillStyle = "hsl(240, 100%, " + belongsToSet + "%)";
                 ctx.fillRect(x, y, 1, 1); // Draw a colorful pixel
             }
             y += 1;
