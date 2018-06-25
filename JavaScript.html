@@ -1,13 +1,14 @@
 <script>
 /*jslint browser*/
 const phi = (1 + Math.sqrt(5)) / 2; // golden mean
-//const c = [1 - phi, 0];
-//const c = [phi - 2, phi -1];
-const c = [-0.8, 0.156];
 const radius = 2;
 const maxRecursions = 100;
+//const C = [1 - phi, 0];
+//const C = [phi - 2, phi -1];
+//const C = [-0.8, 0.156];
+const C = []; // forces creation of Mandelbrot Set
 
-function juliaSet(x, y, r) {
+function juliaSet(x, y, c, r) {
     "use strict";
     if (Math.sqrt(x * x + y * y) > radius) {
         return r / maxRecursions * maxRecursions;
@@ -23,7 +24,7 @@ function juliaSet(x, y, r) {
     xx - yy + 2xyi + c?, e.g., xx - yy - 0.6 + 2xyi + 0i
     */
     r += 1;
-    return juliaSet(x * x - y * y + c[0], 2 * x * y + c[1], r);
+    return juliaSet(x * x - y * y + c[0], 2 * x * y + c[1], c, r);
 }
 
 function main() {
@@ -36,7 +37,10 @@ function main() {
     var panY = 1.5;
     var x = 0;
     var y = 0;
+    var xp;
+    var yp;
     var belongsToSet;
+    var c;
     myCanvas.width = 600;
     myCanvas.height = 600;
     document.body.appendChild(myCanvas);
@@ -46,11 +50,12 @@ function main() {
     while (x < myCanvas.width) {
         y = 0;
         while (y < myCanvas.height) {
-            belongsToSet = juliaSet(
-                x / magnificationFactor - panX,
-                y / magnificationFactor - panY,
-                0
-            );
+            xp = x / magnificationFactor - panX;
+            yp = y / magnificationFactor - panY;
+            c = C.length === 0
+                ? [xp, yp]
+                : C;
+            belongsToSet = juliaSet(xp, yp, c, 0);
             if (belongsToSet === 0) {
                 ctx.fillStyle = "#f00";
                 ctx.fillRect(x, y, 1, 1); // Draw a black pixel
