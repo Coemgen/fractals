@@ -6,7 +6,7 @@ function getFractalsList() {
   return SpreadsheetApp.openById(
     PropertiesService.getScriptProperties()
     .getProperty("FractalConstantsSs")  
-  ).getSheetByName("Mandelbrot Set")
+  ).getSheetByName("Julia Sets")
   .getDataRange()
   .getValues();
 }
